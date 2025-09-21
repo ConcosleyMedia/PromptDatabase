@@ -1,19 +1,19 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import type { Database } from '@/types/database'
+import { createSupabaseServerClient } from '@/lib/supabase-server'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const supabase = createRouteHandlerClient<Database>({ cookies })
+  const supabase = await createSupabaseServerClient()
+  const { id } = await params
 
   try {
     const { data, error } = await supabase
       .from('prompts')
       .select('*')
-      .eq('id', params.id)
+      .eq('id', id)
       .eq('status', 'published')
       .single()
 
@@ -32,7 +32,7 @@ export async function GET(
     const ip = forwarded ? forwarded.split(',')[0] : request.headers.get('x-real-ip')
 
     await supabase.rpc('increment_prompt_views', {
-      prompt_uuid: params.id,
+      prompt_uuid: id,
       user_uuid: user?.id,
       session_uuid: request.headers.get('x-session-id'),
       user_ip: ip,

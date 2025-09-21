@@ -98,7 +98,7 @@ export function PromptFilters({
         {/* Type Filter */}
         <Select
           value={filters.type || ''}
-          onValueChange={(value) => updateFilters({ type: value as any || undefined })}
+          onValueChange={(value) => updateFilters({ type: (value as 'text' | 'image' | 'video') || undefined })}
         >
           <SelectTrigger className="w-32">
             <SelectValue placeholder="Type" />

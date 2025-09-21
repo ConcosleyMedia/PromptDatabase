@@ -326,7 +326,7 @@ export default function SavedPromptsPage() {
                       </div>
                       {prompt.notes && (
                         <div className="text-xs text-muted-foreground italic">
-                          "{prompt.notes}"
+                          &ldquo;{prompt.notes}&rdquo;
                         </div>
                       )}
                     </div>

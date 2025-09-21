@@ -345,7 +345,7 @@ export default function ImagePromptsPage() {
             {prompts.map((prompt) => (
               <PromptCard
                 key={prompt.id}
-                prompt={prompt}
+                prompt={prompt as any}
                 user={user}
                 userVote={userVotes[prompt.id]}
                 isSaved={savedPrompts.has(prompt.id)}

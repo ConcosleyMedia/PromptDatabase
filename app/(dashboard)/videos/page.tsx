@@ -28,7 +28,7 @@ export default function VideoPromptsPage() {
           </div>
           <CardTitle className="text-2xl">Video Prompts Coming Soon</CardTitle>
           <CardDescription className="text-base">
-            We're working on bringing you the best video generation prompts for platforms like Runway, Pika Labs, and more.
+            We&rsquo;re working on bringing you the best video generation prompts for platforms like Runway, Pika Labs, and more.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
