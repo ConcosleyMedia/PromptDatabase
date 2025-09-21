@@ -6,7 +6,7 @@ export default function Home() {
       <div>
         <a href="/health">Health Check</a>
         <br />
-        <a href="/login">Login with Whop</a>
+        <a href="/simple-login">Login with Whop</a>
         <br />
         <a href="/test">Test Page</a>
       </div>
