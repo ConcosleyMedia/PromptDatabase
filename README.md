@@ -130,3 +130,5 @@ OPENAI_API_KEY=your_openai_api_key_here
 ---
 
 🎉 **Your prompt platform is ready to launch!** Start by running the database scripts and testing the authentication flow.
+
+Updated: Fixed Next.js 15 compatibility with @supabase/ssr package.
