@@ -12,7 +12,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { data, error } = await supabase.rpc('get_user_saved_prompts', {
+    const { data, error } = await (supabase as any).rpc('get_user_saved_prompts', {
       user_uuid: user.id
     })
 
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Prompt not found' }, { status: 404 })
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('saved_prompts')
       .insert({
         user_id: user.id,

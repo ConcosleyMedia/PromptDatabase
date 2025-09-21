@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     }
 
     // Upsert vote (update if exists, insert if not)
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('prompt_votes')
       .upsert({
         user_id: user.id,

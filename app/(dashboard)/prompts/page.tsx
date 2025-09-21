@@ -64,8 +64,8 @@ export default function TextPromptsPage() {
         setUser(userProfile)
 
         // Load user's votes and saved prompts
-        if (userProfile) {
-          await loadUserData(userProfile.id)
+        if (userProfile && (userProfile as any).id) {
+          await loadUserData((userProfile as any).id)
         }
       }
 
@@ -92,14 +92,14 @@ export default function TextPromptsPage() {
 
       if (votesData.data) {
         const votes: Record<string, 'up' | 'down'> = {}
-        votesData.data.forEach(vote => {
+        votesData.data.forEach((vote: any) => {
           votes[vote.prompt_id] = vote.vote_type as 'up' | 'down'
         })
         setUserVotes(votes)
       }
 
       if (savedData.data) {
-        setSavedPrompts(new Set(savedData.data.map(s => s.prompt_id)))
+        setSavedPrompts(new Set(savedData.data.map((s: any) => s.prompt_id)))
       }
     } catch (error) {
       console.error('Error loading user data:', error)

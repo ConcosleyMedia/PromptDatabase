@@ -4,7 +4,7 @@ export const signInWithWhop = async () => {
   const supabase = createSupabaseClient()
 
   const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'whop',
+    provider: 'whop' as any,
     options: {
       redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback`,
     },
@@ -58,7 +58,7 @@ export const updateUserProfile = async (userId: string, updates: {
   avatar_url?: string
 }) => {
   const supabase = createSupabaseClient()
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('users')
     .update({ ...updates, updated_at: new Date().toISOString() })
     .eq('id', userId)

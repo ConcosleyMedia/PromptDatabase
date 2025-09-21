@@ -14,7 +14,7 @@ export const getPrompts = async (filters: PromptFilters = {}, page = 0, limit = 
 
   const offset = page * limit
 
-  const { data, error } = await supabase.rpc('search_prompts', {
+  const { data, error } = await (supabase as any).rpc('search_prompts', {
     search_query: filters.search || null,
     prompt_type_filter: filters.type || null,
     category_filter: filters.category || null,
@@ -58,7 +58,7 @@ export const getUserVote = async (promptId: string, userId: string) => {
 
   if (error) throw error
 
-  return data?.vote_type || null
+  return (data as any)?.vote_type || null
 }
 
 export const isPromptSaved = async (promptId: string, userId: string) => {
@@ -79,7 +79,7 @@ export const isPromptSaved = async (promptId: string, userId: string) => {
 export const getSavedPrompts = async (userId: string) => {
   const supabase = createSupabaseClient()
 
-  const { data, error } = await supabase.rpc('get_user_saved_prompts', {
+  const { data, error } = await (supabase as any).rpc('get_user_saved_prompts', {
     user_uuid: userId
   })
 
@@ -153,7 +153,7 @@ export const getSearchSuggestions = async (query: string, limit = 5) => {
 
   if (error) throw error
 
-  return data.map(p => p.title)
+  return (data as any).map((p: any) => p.title)
 }
 
 // User statistics

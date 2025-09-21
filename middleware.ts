@@ -49,7 +49,7 @@ export async function middleware(request: NextRequest) {
       .eq('id', session.user.id)
       .single()
 
-    if (!user?.is_admin) {
+    if (!(user as any)?.is_admin) {
       return NextResponse.redirect(new URL('/dashboard', request.url))
     }
   }

@@ -20,7 +20,7 @@ export async function GET(request: Request) {
 
       if (data.user) {
         // Update or create user profile
-        const { error: profileError } = await supabase
+        const { error: profileError } = await (supabase as any)
           .from('users')
           .upsert({
             id: data.user.id,

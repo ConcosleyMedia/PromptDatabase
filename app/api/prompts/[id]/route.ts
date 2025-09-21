@@ -31,7 +31,7 @@ export async function GET(
     const forwarded = request.headers.get('x-forwarded-for')
     const ip = forwarded ? forwarded.split(',')[0] : request.headers.get('x-real-ip')
 
-    await supabase.rpc('increment_prompt_views', {
+    await (supabase as any).rpc('increment_prompt_views', {
       prompt_uuid: id,
       user_uuid: user?.id,
       session_uuid: request.headers.get('x-session-id'),

@@ -19,7 +19,7 @@ export async function GET(request: Request) {
 
   try {
     // Use the search function from database
-    const { data, error } = await supabase.rpc('search_prompts', {
+    const { data, error } = await (supabase as any).rpc('search_prompts', {
       search_query: search,
       prompt_type_filter: type,
       category_filter: category,
@@ -67,14 +67,14 @@ export async function POST(request: Request) {
       .eq('id', user.id)
       .single()
 
-    if (!userProfile?.is_admin) {
+    if (!(userProfile as any)?.is_admin) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     const body = await request.json()
     const { title, content, description, type, category, tags, platform, style, image_url } = body
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('prompts')
       .insert({
         title,

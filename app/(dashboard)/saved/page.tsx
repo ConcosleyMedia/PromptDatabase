@@ -62,7 +62,7 @@ export default function SavedPromptsPage() {
       setUser(userProfile)
 
       // Get saved prompts
-      const { data, error } = await supabase.rpc('get_user_saved_prompts', {
+      const { data, error } = await (supabase as any).rpc('get_user_saved_prompts', {
         user_uuid: currentUser.id
       })
 
