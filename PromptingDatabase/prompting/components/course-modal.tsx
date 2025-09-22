@@ -14,6 +14,8 @@ import { MarkdownRenderer } from "./markdown-renderer"
 import { VideoEmbed } from "./video-embed"
 import { Edit, Save, X, Plus, Upload, Trash2 } from "lucide-react"
 import { EnhancedMarkdownEditor } from "./enhanced-markdown-editor"
+import { AdminLogin } from "./admin-login"
+import { useAdmin } from "@/contexts/admin-context"
 
 interface CourseModalProps {
   course: Course
@@ -22,10 +24,12 @@ interface CourseModalProps {
 }
 
 export function CourseModal({ course, onClose, onUpdate }: CourseModalProps) {
+  const { isAdmin, login } = useAdmin()
   const [isEditing, setIsEditing] = useState(false)
   const [editedCourse, setEditedCourse] = useState<Course>(course)
   const [newTag, setNewTag] = useState("")
   const [isUploadingThumbnail, setIsUploadingThumbnail] = useState(false)
+  const [showAdminLogin, setShowAdminLogin] = useState(false)
 
   const handleSave = () => {
     onUpdate(editedCourse)
@@ -95,6 +99,22 @@ export function CourseModal({ course, onClose, onUpdate }: CourseModalProps) {
     }))
   }
 
+  const handleEditClick = () => {
+    if (!isAdmin) {
+      setShowAdminLogin(true)
+    } else {
+      setIsEditing(true)
+    }
+  }
+
+  const handleAdminLogin = (adminStatus: boolean) => {
+    if (adminStatus) {
+      login()
+      setIsEditing(true)
+    }
+    setShowAdminLogin(false)
+  }
+
   return (
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
@@ -153,7 +173,7 @@ export function CourseModal({ course, onClose, onUpdate }: CourseModalProps) {
                   </Button>
                 </>
               ) : (
-                <Button size="sm" variant="outline" onClick={() => setIsEditing(true)}>
+                <Button size="sm" variant="outline" onClick={handleEditClick}>
                   <Edit className="h-4 w-4 mr-1" />
                   Edit
                 </Button>
@@ -287,6 +307,12 @@ export function CourseModal({ course, onClose, onUpdate }: CourseModalProps) {
           </Tabs>
         </div>
       </DialogContent>
+
+      <AdminLogin
+        isOpen={showAdminLogin}
+        onClose={() => setShowAdminLogin(false)}
+        onLogin={handleAdminLogin}
+      />
     </Dialog>
   )
 }

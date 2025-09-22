@@ -14,16 +14,17 @@ import { createClient } from "@/lib/supabase/client"
 import type { Course } from "@/types/course"
 import { EnhancedMarkdownEditor } from "@/components/enhanced-markdown-editor"
 import { AdminLogin } from "@/components/admin-login"
+import { useAdmin } from "@/contexts/admin-context"
 
 export default function CoursePage() {
   const params = useParams()
   const router = useRouter()
+  const { isAdmin, login } = useAdmin()
   const [course, setCourse] = useState<Course | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [editData, setEditData] = useState<Course | null>(null)
   const [loading, setLoading] = useState(true)
   const [isUploadingThumbnail, setIsUploadingThumbnail] = useState(false)
-  const [isAdmin, setIsAdmin] = useState(false)
   const [showAdminLogin, setShowAdminLogin] = useState(false)
   const supabase = createClient()
 
@@ -152,10 +153,11 @@ export default function CoursePage() {
   }
 
   const handleAdminLogin = (adminStatus: boolean) => {
-    setIsAdmin(adminStatus)
     if (adminStatus) {
+      login()
       setIsEditing(true)
     }
+    setShowAdminLogin(false)
   }
 
   const handleEditClick = () => {

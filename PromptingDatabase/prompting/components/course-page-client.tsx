@@ -9,6 +9,7 @@ import { EditCourseForm } from "@/components/edit-course-form"
 import { ConnectionStatus } from "@/components/connection-status"
 import { createClient } from "@/lib/supabase/client"
 import type { Course } from "@/types/course"
+import { useAdmin } from "@/contexts/admin-context"
 
 interface CoursePageClientProps {
   initialCourses: Course[]
@@ -16,12 +17,12 @@ interface CoursePageClientProps {
 }
 
 export function CoursePageClient({ initialCourses, usingMockData }: CoursePageClientProps) {
+  const { isAdmin, login } = useAdmin()
   const [courses, setCourses] = useState<Course[]>(initialCourses)
   const [displayedCourses, setDisplayedCourses] = useState<Course[]>([])
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("")
-  const [isAdmin, setIsAdmin] = useState(false)
   const [showAdminLogin, setShowAdminLogin] = useState(false)
   const [editingCourse, setEditingCourse] = useState<Course | null>(null)
   const [showEditForm, setShowEditForm] = useState(false)
@@ -215,11 +216,15 @@ export function CoursePageClient({ initialCourses, usingMockData }: CoursePageCl
   }
 
   const handleAdminLogin = (adminStatus: boolean) => {
-    setIsAdmin(adminStatus)
+    if (adminStatus) {
+      login()
+    }
+    setShowAdminLogin(false)
   }
 
   const handleAdminLogout = () => {
-    setIsAdmin(false)
+    // This would use logout from context if needed
+    setShowAdminLogin(false)
   }
 
   const handleShowAdminLogin = () => {
