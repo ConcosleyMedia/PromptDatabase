@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input"
 import { createClient } from "@/lib/supabase/client"
 import type { Course } from "@/types/course"
 import { EnhancedMarkdownEditor } from "@/components/enhanced-markdown-editor"
+import { AdminLogin } from "@/components/admin-login"
 
 export default function CoursePage() {
   const params = useParams()
@@ -22,6 +23,8 @@ export default function CoursePage() {
   const [editData, setEditData] = useState<Course | null>(null)
   const [loading, setLoading] = useState(true)
   const [isUploadingThumbnail, setIsUploadingThumbnail] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [showAdminLogin, setShowAdminLogin] = useState(false)
   const supabase = createClient()
 
   useEffect(() => {
@@ -148,6 +151,21 @@ export default function CoursePage() {
     setIsEditing(false)
   }
 
+  const handleAdminLogin = (adminStatus: boolean) => {
+    setIsAdmin(adminStatus)
+    if (adminStatus) {
+      setIsEditing(true)
+    }
+  }
+
+  const handleEditClick = () => {
+    if (!isAdmin) {
+      setShowAdminLogin(true)
+    } else {
+      setIsEditing(true)
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -202,7 +220,7 @@ export default function CoursePage() {
                   </Button>
                 </>
               ) : (
-                <Button size="sm" variant="outline" onClick={() => setIsEditing(true)}>
+                <Button size="sm" variant="outline" onClick={handleEditClick}>
                   <Edit className="h-4 w-4 mr-2" />
                   Edit
                 </Button>
@@ -338,6 +356,12 @@ export default function CoursePage() {
           </div>
         )}
       </main>
+
+      <AdminLogin
+        isOpen={showAdminLogin}
+        onClose={() => setShowAdminLogin(false)}
+        onLogin={handleAdminLogin}
+      />
     </div>
   )
 }
