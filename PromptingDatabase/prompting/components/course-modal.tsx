@@ -14,7 +14,6 @@ import { MarkdownRenderer } from "./markdown-renderer"
 import { VideoEmbed } from "./video-embed"
 import { Edit, Save, X, Plus, Upload, Trash2 } from "lucide-react"
 import { EnhancedMarkdownEditor } from "./enhanced-markdown-editor"
-import { put } from "@vercel/blob"
 
 interface CourseModalProps {
   course: Course
@@ -38,17 +37,35 @@ export function CourseModal({ course, onClose, onUpdate }: CourseModalProps) {
     if (!file) return
 
     setIsUploadingThumbnail(true)
+    console.log("[v0] Starting thumbnail upload in modal")
+
     try {
-      const blob = await put(`thumbnails/${Date.now()}-${file.name}`, file, {
-        access: "public",
+      console.log("[v0] Uploading file:", file.name, file.size, file.type)
+
+      // Use the upload-thumbnail API endpoint instead of direct put call
+      const formData = new FormData()
+      formData.append("file", file)
+
+      const response = await fetch("/api/upload-thumbnail", {
+        method: "POST",
+        body: formData,
       })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || "Upload failed")
+      }
+
+      const result = await response.json()
+      console.log("[v0] Upload successful:", result.url)
 
       setEditedCourse((prev) => ({
         ...prev,
-        thumbnailUrl: blob.url,
+        thumbnailUrl: result.url,
       }))
     } catch (error) {
-      console.error("Error uploading thumbnail:", error)
+      console.error("[v0] Error uploading thumbnail:", error)
+      alert("Failed to upload thumbnail. Please try again.")
     } finally {
       setIsUploadingThumbnail(false)
     }
